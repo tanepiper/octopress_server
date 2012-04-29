@@ -7,3 +7,8 @@ var instance = serverTools.createInstance({
     events: ['getFlickrList']
   }
 });
+
+process.on('uncaughtException', function (err) {
+  console.log('Caught exception: ' + err);
+  process.exit(1);
+});

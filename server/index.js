@@ -20,7 +20,6 @@ module.exports = (function() {
     require('./lib/express_server')(instance, options);
     require('./lib/socket.io')(instance, options);
 
-    //instance.io.listen(instance.server);
     instance.server.listen(options.port);
 
     return instance;

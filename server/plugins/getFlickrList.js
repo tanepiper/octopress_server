@@ -51,8 +51,10 @@ module.exports = function(socket, instance) {
 
     var output = [];
     var fetch_photo = function(photo, size, cb) {
-      request(photo[size]).pipe(fs.createWriteStream(instance.options.base + '/client/cache/' + photo.id + '.' + size + '.jpg'));
-      cb();
+      var stream = fs.createWriteStream(instance.options.base + '/client/cache/' + photo.id + '.' + size + '.jpg');
+      stream.on('close', cb);
+      stream.on('error', cb);
+      request(photo[size]).pipe(stream);
     };
 
     var return_result = function(err, res, body) {
@@ -61,10 +63,10 @@ module.exports = function(socket, instance) {
       }
       var _ref = body.photos.photo;
       Seq(_ref)
-        .seqEach(function(photo) {
+        .parEach(function(photo) {
           fetch_photo(photo, 'url_t', this);
         })
-        .seqEach(function(photo) {
+        .parEach(function(photo) {
           fetch_photo(photo, 'url_o', this);
         })
         .seqEach(function(photo) {
@@ -73,7 +75,10 @@ module.exports = function(socket, instance) {
         })
         .seq(function() {
           cache_and_send_result(output.join("\n"));
-        });
+        })
+      .catch(function(err) {
+        return socket.emit('error', err);
+      });
     };
 
     var cache_and_send_result = function(result) {
