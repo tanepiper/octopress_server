@@ -3,6 +3,12 @@ module.exports = function(socket, instance) {
 
   return function(message) {
     console.log('Flickr API Called');
+    if (!message) {
+      message = {};
+    }
+    if (!message.page) {
+      message.page = 1;
+    }
 
     var fs = require('fs');
     var path = require('path');
@@ -44,7 +50,8 @@ module.exports = function(socket, instance) {
           extras: 'url_t,url_s,url_l,url_o',
           format: 'json',
           nojsoncallback: 1,
-          per_page: 6
+          per_page: 6,
+          page: message.page
         },
         json: true
       }, return_result);
@@ -87,6 +94,10 @@ module.exports = function(socket, instance) {
           this();
         })
         .seq(function() {
+          console.log(output.join("\n"));
+          if (message.page !== 1) {
+            return send_result(output.join("\n"));
+          }
           cache_and_send_result(output.join("\n"));
         })
       .catch(function(err) {
