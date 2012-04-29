@@ -51,10 +51,18 @@ module.exports = function(socket, instance) {
 
     var output = [];
     var fetch_photo = function(photo, size, cb) {
-      var stream = fs.createWriteStream(instance.options.base + '/client/cache/' + photo.id + '.' + size + '.jpg');
-      stream.on('close', cb);
-      stream.on('error', cb);
-      request(photo[size]).pipe(stream);
+      var filename = instance.options.base + '/client/cache/' + photo.id + '.' + size + '.jpg';
+      path.exists(filename, function(exists) {
+        if (!exists) {
+          var stream = fs.createWriteStream(filename);
+          stream.on('close', cb);
+          stream.on('error', cb);
+          request(photo[size]).pipe(stream);
+        } else {
+          cb();
+        }
+      });
+
     };
 
     var return_result = function(err, res, body) {
