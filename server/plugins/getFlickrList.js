@@ -90,7 +90,7 @@ module.exports = function(socket, instance) {
           fetch_photo(photo, 'url_o', this);
         })
         .seqEach(function(photo) {
-          output.push('<li><a class="fancybox" rel="group" href="/cache/' + photo.id + '.url_o.jpg"><img style="width:100px;height:100px;" src="/cache/' + photo.id + '.url_t.jpg" alt="' + photo.title +'" title="' + photo.title +'" /></a></li>');
+          output.push('<li><a title="' + photo.title +'" class="fancybox" rel="group" href="/cache/' + photo.id + '.url_o.jpg"><img style="width:100px;height:100px;" src="/cache/' + photo.id + '.url_t.jpg" alt="' + photo.title +'" title="' + photo.title +'" /></a></li>');
           this();
         })
         .seq(function() {
