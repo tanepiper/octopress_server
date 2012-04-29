@@ -1,0 +1,3 @@
+[submodule "vendor/flickrnode"]
+	path = vendor/flickrnode
+	url = https://github.com/ciaranj/flickrnode.git
