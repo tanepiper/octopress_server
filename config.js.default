@@ -1,0 +1,6 @@
+module.exports = {
+  "flickr": {
+    "api_key": "",
+    "user_id": "53352905@N05"
+  }
+};

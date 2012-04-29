@@ -15,14 +15,14 @@ module.exports = function(socket, instance) {
       if (exists) {
         fs.stat(cache_file, function(err, stats) {
           if (err) {
-            return socket.emit('error', err);
+            return socket.emit('error', err.toString());
           }
           if (moment().diff(stats.mtime) >= 1800000) {
             getLatest();
           } else {
             fs.readFile(cache_file, function(err, data) {
               if (err) {
-                return socket.emit('error', err);
+                return socket.emit('error', err.toString());
               }
               send_result(data.toString());
             });
@@ -34,12 +34,13 @@ module.exports = function(socket, instance) {
     });
 
     var getLatest = function() {
+      console.log(instance.options);
       request({
         uri: 'http://api.flickr.com/services/rest',
         qs: {
           method: 'flickr.people.getPublicPhotos',
-          user_id: '53352905@N05',
-          api_key: 'ba19c3d5e56b3f1f47429b27bf319394',
+          user_id: instance.options.flickr.user_id,
+          api_key: instance.options.flickr.api_key,
           extras: 'url_t,url_s,url_l,url_o',
           format: 'json',
           nojsoncallback: 1,
@@ -66,9 +67,13 @@ module.exports = function(socket, instance) {
     };
 
     var return_result = function(err, res, body) {
-      if (err) {
-        return socket.emit('error', err);
+      if (err || body.stat === 'fail') {
+        if (!err) {
+          err = new Error(body.message);
+        }
+        return socket.emit('error', err.toString());
       }
+      console.log(body);
       var _ref = body.photos.photo;
       Seq(_ref)
         .parEach(function(photo) {
@@ -85,14 +90,14 @@ module.exports = function(socket, instance) {
           cache_and_send_result(output.join("\n"));
         })
       .catch(function(err) {
-        return socket.emit('error', err);
+        return socket.emit('error', err.toString());
       });
     };
 
     var cache_and_send_result = function(result) {
       fs.writeFile(cache_file, result, function(err) {
         if (err) {
-          return socket.emit('error', err);
+          return socket.emit('error', err.toString());
         }
         send_result(result);
       });

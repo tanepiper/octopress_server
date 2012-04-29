@@ -1,12 +1,8 @@
 var serverTools = require('./server');
 
-var instance = serverTools.createInstance({
-  base: __dirname,
-  static: __dirname + '/client',
-  socketio_options: {
-    events: ['getFlickrList']
-  }
-});
+var options = require('./config');
+
+var instance = serverTools.createInstance(options);
 
 process.on('uncaughtException', function (err) {
   console.log('Caught exception: ' + err);
