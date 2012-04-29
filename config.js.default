@@ -1,6 +1,11 @@
 module.exports = {
-  "flickr": {
-    "api_key": "",
-    "user_id": "53352905@N05"
+  base: __dirname,
+  static: __dirname + '/client',
+  socketio_options: {
+    events: ['getFlickrList']
+  },
+  flickr: {
+    api_key: "",
+    user_id: "@N05"
   }
 };

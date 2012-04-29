@@ -1,7 +1,9 @@
-module.exports = function(instance, options) {
+module.exports = function(instance, options, store) {
+
   var io = instance.io = require('socket.io').listen(instance.server);
 
   io.configure(function() {
+    io.set('store', store);
     io.enable('browser client etag');
     io.set('log level', 1);
     io.set('transports', ['xhr-polling', 'jsonp-polling']);

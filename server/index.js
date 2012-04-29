@@ -1,6 +1,6 @@
 module.exports = (function() {
 
-  var createInstance = function(options) {
+  var createInstance = function(options, store) {
     var instance = {};
     options = options || {};
 
@@ -18,7 +18,7 @@ module.exports = (function() {
     instance.options = options;
 
     require('./lib/express_server')(instance, options);
-    require('./lib/socket.io')(instance, options);
+    require('./lib/socket.io')(instance, options, store);
 
     instance.server.listen(options.port);
 
