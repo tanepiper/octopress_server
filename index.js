@@ -2,7 +2,6 @@ var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
 
 var store = new (require('socket.io-clusterhub'));
-
 var serverTools = require('./server');
 
 var options = require('./config');
