@@ -1,5 +1,3 @@
-/** Test File 1 **/
-
 var store = new (require('socket.io-clusterhub'));
 var serverTools = require('./../server');
 var options = require('./../config');
