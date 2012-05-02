@@ -6,7 +6,7 @@ module.exports = function(instance, options, store) {
     io.set('store', store);
     io.enable('browser client etag');
     io.set('log level', 1);
-    io.set('transports', ['xhr-polling', 'jsonp-polling']);
+    //io.set('transports', ['xhr-polling', 'jsonp-polling']);
   });
 
   io.sockets.on('connection', function(socket) {
