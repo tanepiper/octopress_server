@@ -59,7 +59,7 @@ module.exports = function(socket, instance) {
 
     var output = [];
     var fetch_photo = function(photo, size, cb) {
-      var filename = instance.options.base + '/client/cache/' + photo.id + '.' + size + '.jpg';
+      var filename = instance.options.static + '/cache/' + photo.id + '.' + size + '.jpg';
       path.exists(filename, function(exists) {
         if (!exists) {
           var stream = fs.createWriteStream(filename);
@@ -80,7 +80,6 @@ module.exports = function(socket, instance) {
         }
         return socket.emit('error', err.toString());
       }
-      console.log(body);
       var _ref = body.photos.photo;
       Seq(_ref)
         .parEach(function(photo) {
@@ -94,7 +93,6 @@ module.exports = function(socket, instance) {
           this();
         })
         .seq(function() {
-          console.log(output.join("\n"));
           if (message.page !== 1) {
             return send_result(output.join("\n"));
           }
