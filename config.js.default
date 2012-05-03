@@ -1,3 +1,5 @@
+// Config file
+
 module.exports = {
   base: __dirname,
   static: __dirname + '/client',
